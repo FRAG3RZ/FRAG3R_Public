@@ -290,11 +290,11 @@ int main(void)
  __enable_irq();
 
  //Draw the logo
- Screen_State_Change(LOGO);
+ Screen_State_Change(STARTING_SCREEN);
 
- #if AUTOMATIC_TRANSITION_TO_PEDAL
+ #if AUTOMATIC_TRANSITION_FROM_STARTING_SCREEN
  HAL_Delay(4000);
- Screen_State_Change(ENDURANCE);
+ Screen_State_Change(AUTOMATIC_SECOND_SCREEN);
  #endif
 
   /* USER CODE END 2 */

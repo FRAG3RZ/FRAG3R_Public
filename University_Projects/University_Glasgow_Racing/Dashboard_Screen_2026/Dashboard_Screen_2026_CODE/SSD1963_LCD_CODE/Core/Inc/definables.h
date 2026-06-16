@@ -16,10 +16,12 @@ enum TouchMode;
 #define SEND_SDC_STATE 0 //set to 1 to send the SDC state over CAN
 #define USE_ADC_FOR_SCREEN_STATE 0 //set to 1 to use the ADC for screen state, 0 to use the read pin
 #define DRAW_LOGO_FROM_SD 0 //set to 1 to draw the big logo from SD card
-#define AUTOMATIC_TRANSITION_TO_PEDAL 1 //set to 1 to automatically transition from logo to endurance to pedal after startup after a short delay, 0 to stay on logo until touch
 
 //starting screen (LOGO, ENDURANCE, PEDAL)
 #define STARTING_SCREEN LOGO
+
+#define AUTOMATIC_TRANSITION_FROM_STARTING_SCREEN 1 //set to 1 to automatically transition from logo to endurance to pedal after startup after a short delay, 0 to stay on logo until touch
+#define AUTOMATIC_SECOND_SCREEN ENDURANCE //second screen (LOGO, ENDURANCE, PEDAL)
 
 //TouchMode
 #define TOUCH_MODE POLLING
