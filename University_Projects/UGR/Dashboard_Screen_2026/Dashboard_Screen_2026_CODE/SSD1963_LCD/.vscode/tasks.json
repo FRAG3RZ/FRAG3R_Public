@@ -1,0 +1,109 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git Pull on Start",
+      "type": "shell",
+      "command": "git pull",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "${workspaceFolder}/build/Release",
+        "-j"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Flash (ST-LINK via CubeProgrammer)",
+      "type": "shell",
+      "command": "STM32_Programmer_CLI",
+      "args": [
+        "-c",
+        "port=SWD",
+        "reset=HWrst",
+        "-w",
+        "${workspaceFolder}/build/Release/SSD1963_LCD.elf",
+        "-v",
+        "-rst"
+      ],
+      "dependsOn": "Build (Release)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Enter DFU over CDC (Windows)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$port = New-Object System.IO.Ports.SerialPort 'COM5',115200,'None',8,'one'; $port.Open(); $port.Write('ENTER_DFU`n'); Start-Sleep -Milliseconds 200; $port.Close()"
+      ],
+      "problemMatcher": [],
+      "windows": {
+        "command": "powershell"
+      }
+    },
+    {
+      "label": "Enter DFU over CDC (macOS)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "printf 'ENTER_DFU\n' > /dev/tty.usbmodemXXXX"
+      ],
+      "problemMatcher": [],
+      "osx": {
+        "command": "bash"
+      }
+    },
+    {
+      "label": "Flash via USB DFU",
+      "type": "shell",
+      "command": "STM32_Programmer_CLI",
+      "args": [
+        "-c",
+        "port=USB1",
+        "-w",
+        "${workspaceFolder}/build/Release/SSD1963_LCD.bin",
+        "0x08000000",
+        "-v",
+        "-rst"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Build + Enter DFU + Flash (Windows)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build (Debug)",
+        "Enter DFU over CDC (Windows)",
+        "Flash via USB DFU"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Build + Enter DFU + Flash (macOS)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build (Debug)",
+        "Enter DFU over CDC (macOS)",
+        "Flash via USB DFU"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
